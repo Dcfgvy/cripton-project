@@ -12,3 +12,55 @@
 
 </p>
 
+## Demo
+
+The app is up and running at https://cripton.app 💻
+
+## Project Structure
+
+Cripton is split into 5 repositories, and a nice way to understand the structure is to look at this mind map:
+
+```mermaid
+mindmap
+  root((Cripton))
+    Frontend — Angular + PrimeNG
+      Solana Blockchain
+      solana-vanity-gpu
+        WebGPU-Ed25519-Scalar-Multiplication
+          WebGPU-SHA512
+          WebGPU-Base58
+    Backend — NestJS
+      Solana Blockchain
+      Database — PostgreSQL
+      IPFS Storage
+        Pinata
+        Filebase
+```
+
+As most other web-based applications, Cripton is generally split into backend and frontend that communicate with each other via REST API. Backend is built on NestJS, ...
+
+## Features
+
+- Light/dark mode toggle
+- Live previews
+- Fullscreen mode
+- Cross platform
+
+## Run locally
+
+## Running Tests
+
+There are no unit or end-to-end tests implemented yet. But a contribution would be extremely valuable.
+
+## Roadmap
+
+## License
+
+[![GNU GPL v3](https://www.gnu.org/graphics/gplv3-or-later.png)](https://www.gnu.org/licenses/gpl-3.0)
+
+## Authors
+
+- [@Dcfgvy](https://www.github.com/Dcfgvy)
+
+
+![Logo](https://cripton.app/images/logo.png)
