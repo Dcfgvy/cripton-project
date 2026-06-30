@@ -124,6 +124,8 @@ Features:
 
 Vanity keypair is a keypair whose public key follows a specific pattern, in most cases a prefix and/or a suffix, for example a keypair starting with "hey...".
 
+#### Under the hood
+
 For keypair generation Solana uses Ed25519 curve cryptography with some extra steps:
 1. Take a pseudo-random 32-bytes seed. This will be the private key.
 2. Hash this seed with SHA-512
@@ -142,11 +144,13 @@ The 3 repositories with WGSL code are all combined in `solana-vanity-gpu` librar
 2. We dispatch `2^n` workgroups of size `256`. Thus we get `2^(n + 8)` threads that have a unique global id ranging from `0` to `2^(n + 8) - 1`. In order to get a unique seed for each thread we just replace the last `n + 8` bits in our initial seed with the current thread's global id.
 3. Afterwards just perform the procedure described above with the seed we got in step 2 and check if the public key matches the pattern. In case it does, save the private key to a storage buffer.
 
-User can input a prefix and/or a suffix (only the charachters in Base58 allowed), specify if he wants a case-sensitive search and whether he wants to use the GPU. It is used by default but sometimes does not work, so only the multi-threaded JavaScript CPU search will be used (a number of web workers will be initialized equal to the number of threads on the CPU).
+#### UI
 
-GPU search will only work if the total length of the pattern is more than 1. The "speed" just controls the value of `n`. It does <ins>not</ins> mean though that decreasing `n` by 1 will decrease the search speed by a factor of 2 ...
+This feature is named "Custom Address" in the UI. User can input a prefix and/or a suffix (only the charachters in Base58 allowed), specify if he wants a case-sensitive search and whether he wants to use the GPU. It is used by default but sometimes does not work, so only the multi-threaded JavaScript CPU search will be used (a number of web workers will be initialized equal to the number of threads on the CPU). GPU search will only work if the total length of the pattern is more than 1.
 
-This feature is called Custom Address in the UI.
+The "speed" just controls the value of `n`. It does <ins>not</ins> mean though that decreasing `n` by 1 will decrease the search speed by a factor of 2. The number of workgroups will be halved, but the execution time will also be halved. What will make the speed actually decrease are things like initializing the dispatch, buffer reads/writes, etc. that are executed before and after every dispatch no matter its size.
+
+
 
 ### Copying trending tokens
 
