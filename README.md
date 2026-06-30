@@ -21,7 +21,7 @@ The app is up and running at [https://cripton.app](https://cripton.app) 💻 Try
 
 ## Philosophy
 
-SPL tokens on Solana offer a wide range of applications for all types of users due to their **flexibility** and **Solana's [high-speed high-throughput](https://www.ainvest.com/news/top-7-blockchains-tps-2025-ranking-fastest-networks-transactions-2508/) architecture**. There are endless possibilities of SPL tokens' applications, but some common examples include using SPL tokens for peer-to-peer payments, Decentralized Finance, cashback programs, gaming (in-game currency, experience points), paying for subscriptions or usage credits, Patron memberships, charity donations, or sometimes you just want to create a meme coin. The list goes on and on.
+SPL tokens on Solana offer a wide range of applications for all types of users due to their **flexibility** and **Solana's [high-speed high-throughput](https://www.ainvest.com/news/top-7-blockchains-tps-2025-ranking-fastest-networks-transactions-2508/) architecture**. There are *endless* possibilities of SPL tokens' applications, but some common examples include using SPL tokens for peer-to-peer payments, Decentralized Finance, cashback programs, gaming (in-game currency, experience points), paying for subscriptions or usage credits, Patron memberships, charity donations, or sometimes you just want to create a meme coin. The list goes on and on.
 
 However, most GUI applications for creating and managing tokens on Solana that are available online are either **low-quality solutions**, or they are **closed-source** products developed by corporations and are **heavily overpriced** for a casual user. 
 
@@ -56,7 +56,9 @@ More details on the stack used:
 - Currently the app uses [dRPC](https://drpc.org/) as the RPC provider for production, but you can use whatever RPC provider you want — it's just a link.
 - In production, all components of the app (frontend, backend, database) are running as [Docker](https://www.docker.com/) containers. In development only the database is dockerized, and frontend and backend run as normal Node.js processes.
 
-READMEs in frontend and backend repositories are not as elaborate about the project as this documentation. They mostly contain front or backend-specific code architechture explanations and installation guides. Links to git repositories:
+<ins>*Note*</ins>: READMEs in frontend and backend repositories are not as elaborate about the project as this documentation. They mostly contain front or backend-specific code architechture explanations and installation & setup guides.
+
+Links to git repositories:
 - [Frontend](https://github.com/Dcfgvy/cripton-frontend)
 - [Backend](https://github.com/Dcfgvy/cripton-backend)
 - [WebGPU-Ed25519-Scalar-Multiplication](https://github.com/Dcfgvy/WebGPU-Ed25519-Scalar-Multiplication)
