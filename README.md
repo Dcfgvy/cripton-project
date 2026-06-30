@@ -110,6 +110,15 @@ flowchart TD
     E --> G(If not, unpins the IPFS files and marks it as CANCELLED)
 ```
 
+<p align="center">
+
+
+<img src="/images/create-token-1.jpg" alt="Create Token Page 1" width="400">
+<img src="/images/create-token-2.jpg" alt="Create Token Page 2" width="400">
+<img src="/images/create-token-3.jpg" alt="Create Token Page 3" width="400">
+
+</p>
+
 ### Multisender
 
 Multisender is the tool for transferring SOL or SPL tokens or Token 2022 tokens to multiple recipients in bulk in as few transactions as possible.
@@ -120,6 +129,8 @@ Features:
 - **Offset Transfer Fees**. Some Token 2022 tokens have the [Transfer Fees](https://solana.com/docs/tokens/extensions/transfer-fees) extension, which reduces the transfer amount by some configured fee. By offsetting the fees the user will pay more so that the recipient still gets the desired amount.
 - **Ignoring Creator Royalties**. Some SPL tokens may have Creator Royalties configured in the Metaplex Metadata. Creator Royalties are essentially a fee that is suggested to be paid to the creators on every sale or transfer of a token, but it can be ignored.
 - **As few transactions as possible**. The max size of a Solana transactions is 1232 bytes. Cripton packs the transfers instructions until there is no place left in every transactions, thus the total number of transactions and therefore network fees is minimized, which is good for both user experience (only 1 transaction at a time can be approved) and user wallet. In order to minimize the instructions count all the developer fees, referral fees, and creator royalties are paid upfront in the first transaction for the whole set of transactions.
+
+<img src="/images/multisender.jpg" alt="Multisender Page" height="500">
 
 ### ✨ Vanity keypair search on the GPU ✨
 
@@ -151,6 +162,8 @@ This feature is named "Custom Address" in the UI. User can input a prefix and/or
 
 The "speed" just controls the value of `n`. It does <ins>not</ins> mean though that decreasing `n` by 1 will decrease the search speed by a factor of 2. The number of workgroups will be halved, but the execution time will also be halved. What will make the speed actually decrease are things like initializing the dispatch, buffer reads/writes, etc. that are executed before and after every dispatch no matter its size.
 
+<img src="/images/vanity-keypair.jpg" alt="Custom Address Page" height="500">
+
 #### WebGPU vs CPU Speed Comparison
 <img src="/images/vanity_keypair_speed_comparison.png" alt="Solana Vanity Keypair Search: WebGPU vs CPU" height="500">
 
@@ -166,6 +179,8 @@ For replicated tokens the following applies:
 - The Metaplex Metadata update authority is Pump Fun's mint address
 - Metadata becomes immutable
 
+<img src="/images/trending-tokens.jpg" alt="Trending Tokens Page" height="500">
+
 ### Affiliate Program
 
 Cripton has an affiliate program to promote the app and it follows a pretty common approach. The referrer can generate a referral link tied to his crypto wallets (for now only Solana), which he can use to recommend Cripton. The link is stored in the database on the backend. When a referee click on a referral link, the referrer data is added to the user's `localStorage`. Based on the current rate, some percent of the service fees paid in every Cripton tool will be automatically sent to the referrer – there will be just one more `transfer` instruction in any transaction.
@@ -173,6 +188,8 @@ Cripton has an affiliate program to promote the app and it follows a pretty comm
 It is important to understand that **total fees ≠ service fees**. If the total fees are `0.1 SOL` and the network fee is `0.02 SOL`, the royalty will be deducted from `0.08 SOL`, not from `0.1 SOL`. Also, the **referral data lives in user's browser cache**, so clearing it will remove the earnings for the referrer from that referee. This design is intended so that a user is not obligated to pay to his referrer for their whole life.
 
 Example of an affiliate link: `https://cripton.app/?r=9HhwWgJm`
+
+<img src="/images/affiliate.jpg" alt="Affiliate Program Page" height="400">
 
 ## Run Locally
 
