@@ -65,9 +65,15 @@ Links to git repositories:
 - [WebGPU-SHA512](https://github.com/Dcfgvy/WebGPU-SHA512)
 - [WebGPU-Base58](https://github.com/Dcfgvy/WebGPU-Base58)
 
-## Main Features & Design Decisions
+## Concepts
 
-In the end, most tools in Cripton generate one or more Solana transactions with all the necessary instructions, which is then sent to the user wallet for signing. The signed transaction is then sent to the selected Solana network for confirmation. Confirmation is not the "final stage" of a Solana transaction and theoretically it can still be reverted under catastrophic network failures, this has never happened in Solana's history though.
+A general understanding of [how Solana works](https://solana.com/docs/core) and especially [how SPL tokens on Solana work](https://solana.com/docs/tokens) would be very helpful for understanding the project.
+
+It is also important to understand the difference between on-chain metadata like Metaplex or Token Metadata Extension and off-chain JSON metadata. On-chain metadata has only the required properties to save space, while off-chain metadata usually lives in decentralized storages and can have a much bigger variety of properties (like tags, image, social links, etc.) — it is a JSON, you can put whatever you want in there. On-chain metadata almost always includes a link to off-chain metadata.
+
+In the end, most tools in Cripton generate one or more Solana transactions with all the necessary instructions, which are then sent to the user wallet for signing. The signed transaction is then sent to the selected Solana network for confirmation. Confirmation is not the "final stage" of a Solana transaction and theoretically it can still be reverted under catastrophic network failures, this has never happened in Solana's history though.
+
+## Main Features
 
 ### Token Creator
 
@@ -84,12 +90,22 @@ Solana Token Creator lets users customize the following across 3 token creation 
 - Revoke or transfer [Freeze](https://solana.com/docs/tokens/basics/freeze-account), [Mint](https://solana.com/docs/tokens/basics/mint-tokens) authority
 - Revoke or transfer token metadata Update authority
 
-Before the transactions is sent, the logo image & additional JSON metadata need to be uploaded to some decentralized storage first. The backend saves the image and JSON metadata to IPFS, while saving the future mint address associated with those files into its database. This step is needed to later remove the files of a not created token (e.g. the user clicks "Confirm", metadata gets uploaded, and then the user quits without confirming the token creation transaction) from IPFS pinning service, as saving data there generally costs money.
+Before the transactions is sent, the logo image & additional JSON metadata need to be uploaded to some decentralized storage first. The backend saves the image and JSON metadata to IPFS, while saving the future mint address associated with those files into its database. This step is needed to later remove the files of a not created token (e.g. the user clicks "Confirm" in Cripton interface, metadata gets uploaded, and then the user quits without confirming the token creation transaction) from IPFS pinning service, as saving data there generally costs money.
 
 A pseudo-random seed is added into the image metadata of each token logo for a very specific reason. Imagine 2 users want to create a token with exactly the same logo (like a popular meme). Then the hash will also be the same which, if the file names were the same, would lead to the same [IPFS CID](https://docs.ipfs.tech/concepts/content-addressing/#what-is-a-cid). Then the first user does end up creating the token, and the second one does not. Cripton will notice that the token was not created after some period of time and will unpin the logo & JSON metadata files associated with that token. In this case the first user will have their token logo removed just because it matched the logo of another token that was not created. The good think is that the file names also include the token mint and a random seed, but a second layer of defense is always beneficial.
 
-This flowchart demonstrates the whole token creation process:
+This flow chart demonstrates the whole token creation process:
 
+```mermaid
+flowchart TD
+    A(User inputs token data & sends it to the backend) --> AA{{Backend rejects the request if the token under the given mint already exists}}
+    AA --> B(Token data is added to the database)
+    B --> C(Image & JSON metadata are uploaded to IPFS)
+    C --> D(User confirms the transaction)
+    D --> E{{After some time backend checks if the token was created}}
+    E --> F(If it was, marks it as CREATED)
+    E --> G(If not, unpins the IPFS files and marks it as CANCELLED)
+```
 
 ### Multisender
 
@@ -97,6 +113,16 @@ This flowchart demonstrates the whole token creation process:
  `WebGPU-SHA512` and `WebGPU-Base58` contain [WGSL](https://www.w3.org/TR/WGSL/)
 
 ### Copying trending tokens
+
+The backend scans [Pump Fun](https://pump.fun/) for the currently trending meme coins (tokens with high growth & engagement), fetches their data, and stores them in a cache in a format convenient for replication. All that happens every few seconds.
+
+On the frontend side, unless Live Updates are off, these trending tokens are constantly pulled and displayed to the user. Copying an existing token follows almost the same workflow as creating a new token, except that the image and JSON metadata uploads are skipped because the token already has its metadata hosted.
+
+For replicated tokens the following applies:
+- The creator in the Metaplex metadata is the creator of the original token
+- Mint and Freeze authorities are revoked
+- The Metaplex Metadata update authority is Pump Fun's mint address
+- Metadata becomes immutable
 
 ### Affiliate Program
 
