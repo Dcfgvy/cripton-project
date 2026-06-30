@@ -69,7 +69,7 @@ Links to git repositories:
 
 A general understanding of [how Solana works](https://solana.com/docs/core) and especially [how SPL tokens on Solana work](https://solana.com/docs/tokens) would be very helpful for understanding the project.
 
-It is also important to understand the difference between on-chain metadata like Metaplex or Token Metadata Extension and off-chain JSON metadata. On-chain metadata has only the required properties to save space, while off-chain metadata usually lives in decentralized storages and can have a much bigger variety of properties (like tags, image, social links, etc.) — it is a JSON, you can put whatever you want in there. On-chain metadata almost always includes a link to off-chain metadata.
+It is also important to understand the difference between on-chain metadata like Metaplex or Token Metadata Extension and off-chain JSON metadata. On-chain metadata only the required properties to save space, while off-chain metadata usually lives in decentralized storages and can have a much bigger variety of properties (like tags, image, social links, etc.) — it is a JSON, you can put whatever you want in there. On-chain metadata almost always includes a link to off-chain metadata and, unlike off-chain metadata, it has the update authority property.
 
 In the end, most tools in Cripton generate one or more Solana transactions with all the necessary instructions, which are then sent to the user wallet for signing. The signed transaction is then sent to the selected Solana network for confirmation. Confirmation is not the "final stage" of a Solana transaction and theoretically it can still be reverted under catastrophic network failures, this has never happened in Solana's history though.
 
@@ -125,6 +125,10 @@ For replicated tokens the following applies:
 - Metadata becomes immutable
 
 ### Affiliate Program
+
+Cripton has an affiliate program to promote the app and it follows a pretty common approach. The referrer can generate a referral link tied to his crypto wallets (for now only Solana), which he can use to recommend Cripton. The link is stored in the database on the backend. When a referee click on a referral link, the referrer data is added to the user's `localStorage`. Based on the current rate, some percent of the service fees paid in every Cripton tool will be automatically sent to the referrer – there will be just one more `transfer` instruction in any transaction.
+
+It is important to understnad that **total fees ≠ service fees**. If the total fees are `0.1 SOL` and the network fee is `0.02 SOL`, the royalty will be deducted from `0.08 SOL`, not from `0.1 SOL`. Also, the **referral data lives in user's browser cache**, so clearing it will remove the earnings for the referrer from that referee. This design is intended so that a user is not obligated to pay to his referrer for their whole life.
 
 ## Run Locally
 
