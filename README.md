@@ -17,7 +17,7 @@ Cripton is an **open-source full-stack web3-based** application for creating and
 
 ## Demo
 
-The app is up and running at [https://cripton.app](https://cripton.app) 💻 Try it out!
+The app would've been up and running if the equipment in a datacenter wouldn't overheat: [https://cripton.app](https://cripton.app) 💻 Try it out!
 
 ## Philosophy
 
@@ -67,7 +67,29 @@ Links to git repositories:
 
 ## Main Features & Design Decisions
 
+In the end, most tools in Cripton generate one or more Solana transactions with all the necessary instructions, which is then sent to the user wallet for signing. The signed transaction is then sent to the selected Solana network for confirmation. Confirmation is not the "final stage" of a Solana transaction and theoretically it can still be reverted under catastrophic network failures, this has never happened in Solana's history though.
+
 ### Token Creator
+
+Creating tokens is the most basic tool you'll need to manage your tokens, otherwise you have nothing to manage. Token Creator creates legacy Solana SPL tokens & [Metaplex Metadata](https://solana.com/docs/tokens/metaplex) for compatiblity, as many other services may not fully support the comparatively new [Token Extensions Program](https://solana.com/docs/tokens/extensions). The original SPL tokens are further referred to as SPL tokens and the Token Extensions Program tokens are further referred to as Token 2022 tokens.
+
+Solana Token Creator lets users customize the following across 3 token creation steps:
+- Token name, symbol, and decimals
+- Logo and description of the token
+- Social links (website, Twitter, Telegram, Discord, Youtube, Medium, Github, Instagram, Reddit, Facebook)
+- Token tags associated with the project
+- Edit or remove creator information (creator name, website)
+- Set or Generate a custom address for the token using the vanity keypair search on the GPU or, if not available, multithreaded search on the CPU
+- Set and distribute the initial token supply across different wallets
+- Revoke or transfer [Freeze](https://solana.com/docs/tokens/basics/freeze-account), [Mint](https://solana.com/docs/tokens/basics/mint-tokens) authority
+- Revoke or transfer token metadata Update authority
+
+Before the transactions is sent, the logo image & additional JSON metadata need to be uploaded to some decentralized storage first. The backend saves the image and JSON metadata to IPFS, while saving the future mint address associated with those files into its database. This step is needed to later remove the files of a not created token (e.g. the user clicks "Confirm", metadata gets uploaded, and then the user quits without confirming the token creation transaction) from IPFS pinning service, as saving data there generally costs money.
+
+A pseudo-random seed is added into the image metadata of each token logo for a very specific reason. Imagine 2 users want to create a token with exactly the same logo (like a popular meme). Then the hash will also be the same which, if the file names were the same, would lead to the same [IPFS CID](https://docs.ipfs.tech/concepts/content-addressing/#what-is-a-cid). Then the first user does end up creating the token, and the second one does not. Cripton will notice that the token was not created after some period of time and will unpin the logo & JSON metadata files associated with that token. In this case the first user will have their token logo removed just because it matched the logo of another token that was not created. The good think is that the file names also include the token mint and a random seed, but a second layer of defense is always beneficial.
+
+This flowchart demonstrates the whole token creation process:
+
 
 ### Multisender
 
