@@ -21,7 +21,11 @@ The app is up and running at [https://cripton.app](https://cripton.app) 💻 Try
 
 ## Philosophy
 
-...
+SPL tokens on Solana offer a wide range of applications for all types of users due to their flexibility and Solana's [high-speed high-throughput](https://www.ainvest.com/news/top-7-blockchains-tps-2025-ranking-fastest-networks-transactions-2508/) architecture. There are endless possibilities of SPL tokens' applications, but some common examples include using SPL tokens for peer-to-peer payments, Decentralized Finance, cashback programs, gaming (in-game currency, experience points), paying for subscriptions or usage credits, Patron memberships, charity donations, or sometimes you just want to create a meme coin. The list goes on and on.
+
+However, most GUI applications for creating and managing tokens on Solana that are available online are either low-quality solutions, or they are closed-source products developed by corporations and are heavily overpriced for a casual user. 
+
+Cripton aims to close the gap between the technicality of manually programming the RPC calls and having to use low-quality or overpriced solutions by offering a highly customizable user-friendly Solana toolkit with each tool heaving as many features as one could possibly need and building gas-efficient transactions to save on compute units costs.
 
 ## Project Structure & Technologies Used
 
@@ -70,8 +74,6 @@ READMEs in frontend and backend repositories are not as elaborate about the proj
 ### ✨ Vanity keypair search on the GPU ✨
  `WebGPU-SHA512` and `WebGPU-Base58` contain [WGSL](https://www.w3.org/TR/WGSL/)
 
-### Update Authorities
-
 ### Copying trending tokens
 
 ### Affiliate Program
@@ -91,13 +93,16 @@ There are no unit or end-to-end tests implemented yet. All `.spec` files were au
 
 ## Development pipeline, CI/CD
 
+...
+
 ## Roadmap
 
 - Firefox support of vanity keypair search on the GPU
 - Add unit and end-to-end tests
 - Mint/Burn Solana tokens
 - Freeze/Thaw Solana tokens
-- Liquidity Pools Manager, bridging multiple DEXes (Raydium, Orca, etc.) into 1 interface
+- Snapshotting token holders
+- Liquidity Pools Manager: bridge multiple DEXes (Raydium, Orca, etc.) into 1 interface
 - Extend Cripton to other blockchains (EVM, TON, SUI)
 
 ## Contributing
