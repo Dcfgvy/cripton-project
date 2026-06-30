@@ -17,7 +17,7 @@ Cripton is an **open-source full-stack web3-based** application for creating and
 
 ## Demo
 
-The app would've been up and running if the equipment in a datacenter wouldn't overheat: [https://cripton.app](https://cripton.app) 💻 Try it out!
+The app would've been up and running if the equipment in the Qupra DC2 data center wouldn't overheat on 29.06.2026: [https://cripton.app](https://cripton.app) 💻 Try it out!
 
 ## Philosophy
 
@@ -38,8 +38,8 @@ mindmap
       Solana Blockchain
       solana-vanity-gpu
         WebGPU-Ed25519-Scalar-Multiplication
-          WebGPU-SHA512
-          WebGPU-Base58
+        WebGPU-SHA512
+        WebGPU-Base58
     Backend — NestJS
       Solana Blockchain
       Database — PostgreSQL
@@ -51,7 +51,7 @@ mindmap
 As most other web-based applications, Cripton is generally split into backend and frontend that communicate with each other via **REST API**. Backend is built on [**NestJS**](https://nestjs.com/) — a progressive Node.js framework, and frontend — on [**Angular**](https://v19.angular.dev/). Because the app is built around the **Solana blockchain**, external libraries like `@solana/web3.js`, `@metaplex-foundation/umi`, and `@solana/wallet-adapter` are heavily used for building transactions, communicating with user wallets, and generally interacting with Solana on both frontend and backend.
 
 More details on the stack used:
-- Frontend uses [PrimeNG](https://v19.primeng.org/) components & styles library for UI. In the mindmap you can also see libraries `solana-vanity-gpu`, `WebGPU-Ed25519-Scalar-Multiplication`, `WebGPU-SHA512`, and `WebGPU-Base58`, which were all customly created for Cripton with one goal in mind: <b>perform [vanity keypair](https://www.reddit.com/r/BitcoinBeginners/comments/7y8i6k/what_is_a_vanity_key/) search on the GPU directly in the browser</b>. For this task Cripton uses <b>WebGPU</b> — a relatively new JavaScript API for general-purpose GPU computing. More on that in the Features section.
+- Frontend uses [PrimeNG](https://v19.primeng.org/) components & styles library for UI. In the mindmap you can also see libraries `solana-vanity-gpu`, `WebGPU-Ed25519-Scalar-Multiplication`, `WebGPU-SHA512`, and `WebGPU-Base58`, which were all customly created for Cripton with one goal in mind: <b>perform [vanity keypair](https://www.reddit.com/r/BitcoinBeginners/comments/7y8i6k/what_is_a_vanity_key/) search on the GPU directly in the browser</b>. For this task Cripton uses <b>WebGPU</b> — a relatively new JavaScript API for general-purpose GPU computing. More on that in the Main Features section.
 - Backend follows a pretty common Nest application architecture with **Express HTTP Server** under the hood. The database used is [PostgreSQL](https://www.postgresql.org/), and it's mainly needed to just store service prices, referral links information, and links to images and token metadata files in the [IPFS storage](https://ipfs.tech/). IPFS is a decentralized file system where all the user-uploaded content like token metadata and images actually lives. Cripton supports [Pinata](https://pinata.cloud/) and [Filebase](https://filebase.com/) as [IPFS pinning services](https://pinata.cloud/blog/what-is-an-ipfs-pinning-service/), currently Filebase is used in production.
 - Currently the app uses [dRPC](https://drpc.org/) as the RPC provider for production, but you can use whatever RPC provider you want — it's just a link.
 - In production, all components of the app (frontend, backend, database) are running as [Docker](https://www.docker.com/) containers. In development only the database is dockerized, and frontend and backend run as normal Node.js processes.
@@ -68,6 +68,8 @@ Links to git repositories:
 ## Concepts
 
 A general understanding of [how Solana works](https://solana.com/docs/core) and especially [how SPL tokens on Solana work](https://solana.com/docs/tokens) would be very helpful for understanding the project.
+
+Knowing the fundamentals of WebGPU is needed to understand how vanity keypair search on the GPU works. [Here](https://webgpufundamentals.org/webgpu/lessons/webgpu-fundamentals.html) is really nice introductory article.
 
 It is also important to understand the difference between on-chain metadata like Metaplex or Token Metadata Extension and off-chain JSON metadata. On-chain metadata only the required properties to save space, while off-chain metadata usually lives in decentralized storages and can have a much bigger variety of properties (like tags, image, social links, etc.) — it is a JSON, you can put whatever you want in there. On-chain metadata almost always includes a link to off-chain metadata and, unlike off-chain metadata, it has the update authority property.
 
@@ -119,7 +121,32 @@ Features:
 - **As few transactions as possible**. The max size of a Solana transactions is 1232 bytes. Cripton packs the transfers instructions until there is no place left in every transactions, thus the total number of transactions and therefore network fees is minimized, which is good for both user experience (only 1 transaction at a time can be approved) and user wallet. In order to minimize the instructions count all the developer fees, referral fees, and creator royalties are paid upfront in the first transaction for the whole set of transactions.
 
 ### ✨ Vanity keypair search on the GPU ✨
- `WebGPU-SHA512` and `WebGPU-Base58` contain [WGSL](https://www.w3.org/TR/WGSL/)
+
+Vanity keypair is a keypair whose public key follows a specific pattern, in most cases a prefix and/or a suffix, for example a keypair starting with "hey...".
+
+For keypair generation Solana uses Ed25519 curve cryptography with some extra steps:
+1. Take a pseudo-random 32-bytes seed. This will be the private key.
+2. Hash this seed with SHA-512
+3. Take the first 32 bytes of the hash and clamp them in a specific way
+4. Interpret the byte array from step 3 as a little-endian integer `a`
+5. Perform scalar point multiplication `A = a * B`, where B is a point with B.y = 4/5 and positive B.x
+6. Compress the resulting point to 32 bytes `compressed = A.y + (sign(A.x) << 255)` (operations are performed `mod 2^255 - 19`, so the MSB of `A.y` is always 0)
+7. Interpret `compressed` as a byte string and convert to Base58. The final text string will be the familiar Solana Base58 public key.
+
+We can see that because of hashing and point multiplication the only way to find a keypair we want is to just brute-force the search. That means just trying with random seeds until we find the public key pattern we want. This task is very similar to the Proof of Work mechanism used, for example, in Bitcoin, where miners race to find a nonce that would create a hash starting with a certain number of zeros. And GPUs are ideal for this! In order to do that in the browser environment WebGPU, a relatively new JavaScript API for general-purpose GPU computing, is used. Specifically, compute shaders are used for all the computation, something that is not available in the older APIs like [WebGL](https://en.wikipedia.org/wiki/WebGL).
+
+Unfortunately, there were no shaders for SHA-512 hashing, Base58 encoding or Ed25519 scalar multiplication available anywhere online, so all of them had to be created from basically zero for this project. `WebGPU-SHA512`, `WebGPU-Base58`, and `WebGPU-Ed25519-Scalar-Multiplication` repositories contain [WGSL](https://www.w3.org/TR/WGSL/) (WebGPU Shading Language) code for the respective compute shaders. `WebGPU-Ed25519-Scalar-Multiplication` is based on [Daniel J. Bernstein's ref10 reference implementation in C](https://github.com/floodyberry/supercop/tree/master/crypto_sign/ed25519/ref10) as well as the fixed-base comb method for scalar multiplication and some other papers. Find more details in the respective repositories.
+
+The 3 repositories with WGSL code are all combined in `solana-vanity-gpu` library where the actual search is finally performed, `solana-vanity-gpu` is part of the frontend repository. Pseudo-random private keys are generated the following way:
+1. On the JS-side, 32 bytes are seeded with seeded with cryptographically secure bytes.
+2. We dispatch `2^n` workgroups of size `256`. Thus we get `2^(n + 8)` threads that have a unique global id ranging from `0` to `2^(n + 8) - 1`. In order to get a unique seed for each thread we just replace the last `n + 8` bits in our initial seed with the current thread's global id.
+3. Afterwards just perform the procedure described above with the seed we got in step 2 and check if the public key matches the pattern. In case it does, save the private key to a storage buffer.
+
+User can input a prefix and/or a suffix (only the charachters in Base58 allowed), specify if he wants a case-sensitive search and whether he wants to use the GPU. It is used by default but sometimes does not work, so only the multi-threaded JavaScript CPU search will be used (a number of web workers will be initialized equal to the number of threads on the CPU).
+
+GPU search will only work if the total length of the pattern is more than 1. The "speed" just controls the value of `n`. It does <ins>not</ins> mean though that decreasing `n` by 1 will decrease the search speed by a factor of 2 ...
+
+This feature is called Custom Address in the UI.
 
 ### Copying trending tokens
 
