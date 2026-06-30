@@ -191,6 +191,7 @@ There are no unit or end-to-end tests implemented yet. All `.spec` files were au
 ## Roadmap
 
 - Firefox support of vanity keypair search on the GPU
+- Use `u32` instead of `u64` struct in WGSL shaders to massively increase the speed
 - Add unit and end-to-end tests
 - Mint/Burn Solana tokens
 - Freeze/Thaw Solana tokens
