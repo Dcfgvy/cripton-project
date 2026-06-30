@@ -17,7 +17,7 @@ Cripton is an **open-source full-stack web3-based** application for creating and
 
 ## Demo
 
-The app would've been up and running if the equipment in the Qupra DC2 data center wouldn't overheat on 29.06.2026: [https://cripton.app](https://cripton.app) 💻 Try it out!
+The app *would've been* up and running if the equipment in the Amsterdam Qupra DC2 data center wouldn't overheat on 29.06.2026 [https://cripton.app](https://cripton.app)
 
 ## Philosophy
 
@@ -150,7 +150,8 @@ This feature is named "Custom Address" in the UI. User can input a prefix and/or
 
 The "speed" just controls the value of `n`. It does <ins>not</ins> mean though that decreasing `n` by 1 will decrease the search speed by a factor of 2. The number of workgroups will be halved, but the execution time will also be halved. What will make the speed actually decrease are things like initializing the dispatch, buffer reads/writes, etc. that are executed before and after every dispatch no matter its size.
 
-
+#### WebGPU vs CPU Speed Comparison
+<img src="/images/vanity_keypair_speed_comparison.png" alt="Solana Vanity Keypair Search: WebGPU vs CPU" height="500">
 
 ### Copying trending tokens
 
