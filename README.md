@@ -137,7 +137,7 @@ For replicated tokens the following applies:
 
 Cripton has an affiliate program to promote the app and it follows a pretty common approach. The referrer can generate a referral link tied to his crypto wallets (for now only Solana), which he can use to recommend Cripton. The link is stored in the database on the backend. When a referee click on a referral link, the referrer data is added to the user's `localStorage`. Based on the current rate, some percent of the service fees paid in every Cripton tool will be automatically sent to the referrer – there will be just one more `transfer` instruction in any transaction.
 
-It is important to understnad that **total fees ≠ service fees**. If the total fees are `0.1 SOL` and the network fee is `0.02 SOL`, the royalty will be deducted from `0.08 SOL`, not from `0.1 SOL`. Also, the **referral data lives in user's browser cache**, so clearing it will remove the earnings for the referrer from that referee. This design is intended so that a user is not obligated to pay to his referrer for their whole life.
+It is important to understand that **total fees ≠ service fees**. If the total fees are `0.1 SOL` and the network fee is `0.02 SOL`, the royalty will be deducted from `0.08 SOL`, not from `0.1 SOL`. Also, the **referral data lives in user's browser cache**, so clearing it will remove the earnings for the referrer from that referee. This design is intended so that a user is not obligated to pay to his referrer for their whole life.
 
 Example of an affiliate link: `https://cripton.app/?r=9HhwWgJm`
 
