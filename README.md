@@ -17,7 +17,8 @@ Cripton is an **open-source full-stack web3-based** application for creating and
 
 ## Demo
 
-The app *would've been* up and running if the equipment in the Amsterdam Qupra DC2 data center wouldn't overheat on 29.06.2026 [https://cripton.app](https://cripton.app)
+The app *would've been* up and running if the equipment in the Amsterdam Qupra DC2 data center wouldn't overheat on 29.06.2026
+[https://cripton.app](https://cripton.app)
 
 ## Philosophy
 
@@ -79,7 +80,7 @@ In the end, most tools in Cripton generate one or more Solana transactions with 
 
 ### Token Creator
 
-Creating tokens is the most basic tool you'll need to manage your tokens, otherwise you have nothing to manage. Token Creator creates legacy Solana SPL tokens & [Metaplex Metadata](https://solana.com/docs/tokens/metaplex) for compatiblity, as many other services may not fully support the comparatively new [Token Extensions Program](https://solana.com/docs/tokens/extensions). The original SPL tokens are further referred to as SPL tokens and the Token Extensions Program tokens are further referred to as Token 2022 tokens.
+Creating tokens is the most basic tool you'll need to manage your tokens, otherwise you have nothing to manage. Token Creator creates legacy Solana SPL tokens & [Metaplex Metadata](https://solana.com/docs/tokens/metaplex) for compatiblity, as many other services may not fully support the comparatively new [Token Extensions Program](https://solana.com/docs/tokens/extensions). The original SPL tokens are further referred to as SPL tokens and the Token Extensions Program tokens are referred to as Token 2022 tokens.
 
 Solana Token Creator lets users customize the following across 3 token creation steps:
 - Token name, symbol, and decimals
@@ -213,6 +214,12 @@ Contributions are welcome! Whether you'd like to report a bug, implement a new f
 3. Make your changes.
 4. Commit your changes with clear commit messages.
 5. Push your branch and open a Pull Request.
+
+## Where do the collected fees go?
+
+The collected fees in SOL on Mainnet are used to fund the RPC usage credits, pay for the IPFS pinning service, the domain name, and the server. All the remains are distributed among contributors.
+
+For now Solana Mainnet is not available in production, so no fees can be theoretically collected.
 
 ## Licenses
 
