@@ -133,7 +133,7 @@ Features:
 
 ### ✨ Vanity keypair search on the GPU ✨
 
-Vanity keypair is a keypair whose public key follows a specific pattern, in most cases a prefix and/or a suffix, for example a keypair starting with "hey...".
+Vanity keypair is a keypair whose public key follows a specific pattern, in most cases a prefix and/or a suffix, for example a public key starting with "hey...".
 
 #### Under the hood
 
@@ -164,6 +164,7 @@ The "speed" just controls the value of `n`. It does <ins>not</ins> mean though t
 <img src="/images/vanity-keypair.jpg" alt="Custom Address Page" height="500">
 
 #### WebGPU vs CPU Speed Comparison
+
 <img src="/images/vanity_keypair_speed_comparison.png" alt="Solana Vanity Keypair Search: WebGPU vs CPU" height="500">
 
 ### Copying trending tokens
