@@ -17,8 +17,7 @@ Cripton is an **open-source full-stack web3-based** application for creating and
 
 ## Demo
 
-The app *would've been* up and running if the equipment in the Amsterdam Qupra DC2 data center wouldn't overheat on 29.06.2026
-[https://cripton.app](https://cripton.app)
+The app is up and running at [https://cripton.app](https://cripton.app) 💻
 
 ## Philosophy
 
